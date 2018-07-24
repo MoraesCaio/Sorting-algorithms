@@ -29,3 +29,25 @@ class Sorter(object):
             # swaps if current is not the minimum found
             if idxMin != i:
                 seq[i], seq[idxMin] = seq[idxMin], seq[i]
+
+    # TO DO
+    # def bubble(self, seq):
+    #     pass
+
+    # def quick(self, seq):
+    #     pass
+
+    # def merge(self, seq):
+    #     pass
+
+    # def heap(self, seq):
+    #     pass
+
+    # def counting(self, seq):
+    #     pass
+
+    # def radix(self, seq):
+    #     pass
+
+    # def bucket(self, seq):
+    #     pass
