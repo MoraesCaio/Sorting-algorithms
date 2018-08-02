@@ -24,6 +24,7 @@ parser.add_argument('-ul', '--few-unique', action='store_true', help='Calls sort
 # SORTING METHODS
 parser.add_argument('-is', '--insertion', action='store_true', help='Calls INSERTION sort.')
 parser.add_argument('-ss', '--selection', action='store_true', help='Calls SELECTION sort.')
+parser.add_argument('-ms', '--merge', action='store_true', help='Calls MERGE sort.')
 
 
 args, _ = parser.parse_known_args()
@@ -68,6 +69,10 @@ if args.selection:
     print('\n#### SELECTION ####')
     sort_lists(s.selection)
 
+if args.merge:
+    print('\n#### MERGE ####')
+    sort_lists(s.merge)
+
 # TO DO
 # if args.bubble:
 #     print('\n#### BUBBLE ####')
@@ -76,10 +81,6 @@ if args.selection:
 # if args.quick:
 #     print('\n#### QUICK ####')
 #     sort_lists(s.quick)
-
-# if args.merge:
-#     print('\n#### MERGE ####')
-#     sort_lists(s.merge)
 
 # if args.heap:
 #     print('\n#### HEAP ####')

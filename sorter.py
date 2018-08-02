@@ -30,14 +30,44 @@ class Sorter(object):
             if idxMin != i:
                 seq[i], seq[idxMin] = seq[idxMin], seq[i]
 
+    def merge(self, seq, verbose=False):
+        if verbose: print('\tSplitting: ' + str(seq))
+        
+        if len(seq) > 1:
+            middle = len(seq) // 2
+            left, right = seq[:middle], seq[middle:]
+            
+            self.merge(left)
+            self.merge(right)
+
+            # Merging halves
+            i, j, k = 0, 0, 0
+
+            while i < len(left) and j < len(right):
+                if left[i] < right[j]:
+                    seq[k] = left[i]
+                    i += 1
+                else:
+                    seq[k] = right[j]
+                    j += 1
+                k += 1
+
+            # Adding remaining elements from each half
+            while i < len(left):
+                seq[k] = left[i]
+                i, k = (i + 1), (k + 1)
+
+            while j < len(right):
+                seq[k] = right[j]
+                j, k = (j + 1), (k + 1)
+
+        if verbose: print('\tMerging: ' + str(seq))
+
     # TO DO
     # def bubble(self, seq):
     #     pass
 
     # def quick(self, seq):
-    #     pass
-
-    # def merge(self, seq):
     #     pass
 
     # def heap(self, seq):
