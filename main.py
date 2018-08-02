@@ -5,9 +5,9 @@ import argparse
 parser = argparse.ArgumentParser()
 
 # SETTINGS
-parser.add_argument('-n', '--length', type=int, default=2, help='Number of elements.')
-parser.add_argument('-m', '--min', type=int, default=0, help='Minimum value possible for elements.')
-parser.add_argument('-M', '--max', type=int, default=100, help='Maximum value possible for elements.')
+parser.add_argument('-n', '--length', type=int, default=2, help='Number of elements. Minimum = 2')
+parser.add_argument('-m', '--min', type=int, default=0, help='Minimum value possible for elements. Default = 0')
+parser.add_argument('-M', '--max', type=int, default=100, help='Maximum value possible for elements. Default = 100')
 parser.add_argument('--swaps', type=int, default=1, help='Number of swaps made on "nearly sorted" list generation.\n' +
                                                          'For verbose, use a negative value.')
 parser.add_argument('--uniques', type=int, default=1, help='Number of unique values on "few uniques" list.\n' +
@@ -41,12 +41,12 @@ def sort(lst, func, title='LIST'):
     print(lst)
     temp = lst[:]
     func(temp)
+    print('\tList is sorted? ' + str(temp == g.sorted_l))
     print('\tResult:\t\t' + str(temp))
     print('\t-----------------------')
 
 
 def sort_lists(func):
-    print('EXPECTED:\t' + str(g.sorted_l), end='\n\n')
     if args.sorted:
         sort(g.sorted_l, func, 'SORTED:\t\t')
     if args.nearly:
@@ -57,6 +57,7 @@ def sort_lists(func):
         sort(g.random_l, func, 'RANDOM:\t\t')
     if args.few_unique:
         sort(g.few_unique_l, func, 'FEW UNIQUES:\t')
+    print('\tEXPECTED:\t' + str(g.sorted_l), end='\n\n')
 
 
 if args.insertion:

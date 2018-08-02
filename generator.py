@@ -49,7 +49,6 @@ class Generator(object):
 
         return nearly_l
 
-
     def print_lists(self):
         print('\tRandom:\t\t', end='')
         print(self.random_l)
