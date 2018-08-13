@@ -38,14 +38,15 @@ print('#### LISTS ####')
 g.print_lists()
 
 
-def sort(lst, func, title='LIST'):
+def sort(lst, func, title='LIST', expected_few_unique=False):
     print('\t' + title, end='')
     print(lst)
     temp = lst[:]
     func(temp)
-    print('\tList is sorted? ' + str(temp == g.sorted_l))
+    print('\tList is sorted? ' + str(temp == (sorted(g.few_unique_l) if expected_few_unique else g.sorted_l)))
     print('\tResult:\t\t' + str(temp))
     print('\t-----------------------')
+    print('\tEXPECTED:\t' + str(sorted(g.few_unique_l) if expected_few_unique else g.sorted_l), end='\n\n')
 
 
 def sort_lists(func):
@@ -58,8 +59,7 @@ def sort_lists(func):
     if args.random:
         sort(g.random_l, func, 'RANDOM:\t\t')
     if args.few_unique:
-        sort(g.few_unique_l, func, 'FEW UNIQUES:\t')
-    print('\tEXPECTED:\t' + str(g.sorted_l), end='\n\n')
+        sort(g.few_unique_l, func, 'FEW UNIQUES:\t', expected_few_unique=True)
 
 
 if args.insertion:
