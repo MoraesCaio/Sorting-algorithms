@@ -31,12 +31,13 @@ class Sorter(object):
                 seq[i], seq[idxMin] = seq[idxMin], seq[i]
 
     def merge(self, seq, verbose=False):
-        if verbose: print('\tSplitting: ' + str(seq))
-        
+        if verbose:
+            print('\tSplitting: ' + str(seq))
+
         if len(seq) > 1:
             middle = len(seq) // 2
             left, right = seq[:middle], seq[middle:]
-            
+
             self.merge(left)
             self.merge(right)
 
@@ -61,13 +62,64 @@ class Sorter(object):
                 seq[k] = right[j]
                 j, k = (j + 1), (k + 1)
 
-        if verbose: print('\tMerging: ' + str(seq))
+        if verbose:
+            print('\tMerging: ' + str(seq))
 
-    # TO DO
+    def quick(self, seq):
+        self._quick_sort(seq, 0, len(seq) - 1)
+
+    def _quick_sort(self, seq, lo, hi):
+        if hi <= lo:
+            return
+
+        Sorter._median_pivot(seq, lo, hi)
+        pivot = Sorter._quick_partition(seq, lo, hi)
+        self._quick_sort(seq, lo, pivot - 1)
+        self._quick_sort(seq, pivot + 1, hi)
+
+    @staticmethod
+    def _quick_partition(seq, lo, hi):
+        i = lo + 1
+        j = hi
+        while True:
+
+            while seq[i] <= seq[lo]:
+                i += 1
+                if i >= hi:
+                    break
+
+            while seq[j] > seq[lo]:
+                j -= 1
+                if j <= lo:
+                    break
+
+            if i >= j:
+                break
+
+            seq[i], seq[j] = seq[j], seq[i]
+
+        seq[lo], seq[j] = seq[j], seq[lo]
+        return j
+
+    @staticmethod
+    def _median_pivot(seq, lo, hi):
+        mid = (lo + hi) // 2
+        if seq[lo] > seq[mid]:
+            seq[lo], seq[mid] = seq[mid], seq[lo]
+        if seq[mid] > seq[hi]:
+            seq[mid], seq[hi] = seq[hi], seq[mid]
+        if seq[mid] > seq[lo]:
+            seq[mid], seq[lo] = seq[lo], seq[mid]
+
+    def _test_median_pivot(self):
+        a = [[2, 1, 3], [2, 3, 1], [1, 2, 3], [3, 2, 1], [1, 3, 2], [3, 1, 2]]
+        for i in a:
+            self._median_pivot(i, 0, 2)
+        print(a)
+
+
+# TO DO
     # def bubble(self, seq):
-    #     pass
-
-    # def quick(self, seq):
     #     pass
 
     # def heap(self, seq):

@@ -5,12 +5,12 @@ import argparse
 parser = argparse.ArgumentParser()
 
 # SETTINGS
-parser.add_argument('-n', '--length', type=int, default=2, help='Number of elements. Minimum = 2')
+parser.add_argument('-n', '--length', type=int, default=10, help='Number of elements. Minimum = 2')
 parser.add_argument('-m', '--min', type=int, default=0, help='Minimum value possible for elements. Default = 0')
 parser.add_argument('-M', '--max', type=int, default=100, help='Maximum value possible for elements. Default = 100')
-parser.add_argument('--swaps', type=int, default=1, help='Number of swaps made on "nearly sorted" list generation.\n' +
+parser.add_argument('--swaps', type=int, default=4, help='Number of swaps made on "nearly sorted" list generation.\n' +
                                                          'For verbose, use a negative value.')
-parser.add_argument('--uniques', type=int, default=1, help='Number of unique values on "few uniques" list.\n' +
+parser.add_argument('--uniques', type=int, default=5, help='Number of unique values on "few uniques" list.\n' +
                                                            'For verbose, use a negative value.')
 parser.add_argument('--seed', type=int, default=None, help='Integer random seed.')
 
@@ -25,6 +25,7 @@ parser.add_argument('-ul', '--few-unique', action='store_true', help='Calls sort
 parser.add_argument('-is', '--insertion', action='store_true', help='Calls INSERTION sort.')
 parser.add_argument('-ss', '--selection', action='store_true', help='Calls SELECTION sort.')
 parser.add_argument('-ms', '--merge', action='store_true', help='Calls MERGE sort.')
+parser.add_argument('-qs', '--quick', action='store_true', help='Calls QUICK sort.')
 
 
 args, _ = parser.parse_known_args()
@@ -73,14 +74,14 @@ if args.merge:
     print('\n#### MERGE ####')
     sort_lists(s.merge)
 
+if args.quick:
+    print('\n#### QUICK ####')
+    sort_lists(s.quick)
+
 # TO DO
 # if args.bubble:
 #     print('\n#### BUBBLE ####')
 #     sort_lists(s.bubble)
-
-# if args.quick:
-#     print('\n#### QUICK ####')
-#     sort_lists(s.quick)
 
 # if args.heap:
 #     print('\n#### HEAP ####')
