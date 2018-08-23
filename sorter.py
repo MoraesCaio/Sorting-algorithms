@@ -140,6 +140,26 @@ class Sorter(object):
 
         for i in range(len(seq)):
             seq[i] = result[i]
+
+    @staticmethod
+    def counting_in_place(seq, max_val=None):
+        if max_val is None:
+            max_val = seq[0]
+            for i in range(1, len(seq)):
+                if seq[i] > max_val:
+                    max_val = seq[i]
+
+        count = [0] * (max_val + 1)
+
+        for i in seq:
+            count[i] += 1
+
+        i = 0
+        for j in range(max_val + 1):
+            for c in range(count[j]):
+                seq[i] = j
+                i += 1
+
 # TO DO
     # def bubble(self, seq):
     #     pass
