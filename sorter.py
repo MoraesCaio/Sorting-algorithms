@@ -117,7 +117,29 @@ class Sorter(object):
             self._median_pivot(i, 0, 2)
         print(a)
 
+    @staticmethod
+    def counting(seq, max_val=None):
+        if max_val is None:
+            max_val = seq[0]
+            for i in range(1, len(seq)):
+                if seq[i] > max_val:
+                    max_val = seq[i]
 
+        count = [0] * (max_val + 1)
+
+        for i in range(len(seq)):
+            count[seq[i]] += 1
+
+        for i in range(1, len(count)):
+            count[i] += count[i - 1]
+
+        result = [0] * len(seq)
+        for i in range(len(seq) - 1, -1, -1):
+            result[count[seq[i]] - 1] = seq[i]
+            count[seq[i]] -= 1
+
+        for i in range(len(seq)):
+            seq[i] = result[i]
 # TO DO
     # def bubble(self, seq):
     #     pass
