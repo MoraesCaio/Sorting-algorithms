@@ -27,6 +27,7 @@ parser.add_argument('-ss', '--selection', action='store_true', help='Calls SELEC
 parser.add_argument('-ms', '--merge', action='store_true', help='Calls MERGE sort.')
 parser.add_argument('-qs', '--quick', action='store_true', help='Calls QUICK sort.')
 parser.add_argument('-cs', '--counting', action='store_true', help='Calls COUNTING sort.')
+parser.add_argument('-hs', '--heap', action='store_true', help='Calls HEAP sort.')
 
 
 args, _ = parser.parse_known_args()
@@ -83,14 +84,14 @@ if args.counting:
     print('\n#### COUNTING ####')
     sort_lists(s.counting)
 
+if args.heap:
+    print('\n#### HEAP ####')
+    sort_lists(s.heap)
+
 # TO DO
 # if args.bubble:
 #     print('\n#### BUBBLE ####')
 #     sort_lists(s.bubble)
-
-# if args.heap:
-#     print('\n#### HEAP ####')
-#     sort_lists(s.heap)
 
 # if args.radix:
 #     print('\n#### RADIX ####')

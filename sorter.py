@@ -1,3 +1,6 @@
+import math
+
+
 class Sorter(object):
 
     def insertion(self, seq):
@@ -65,17 +68,19 @@ class Sorter(object):
         if verbose:
             print('\tMerging: ' + str(seq))
 
+    # QUICK METHODS: quick (caller), _quick_sort (recursive), _quick_partition and _median_pivot (optimizer)
     def quick(self, seq):
         self._quick_sort(seq, 0, len(seq) - 1)
 
-    def _quick_sort(self, seq, lo, hi):
+    @staticmethod
+    def _quick_sort(seq, lo, hi):
         if hi <= lo:
             return
 
         Sorter._median_pivot(seq, lo, hi)
         pivot = Sorter._quick_partition(seq, lo, hi)
-        self._quick_sort(seq, lo, pivot - 1)
-        self._quick_sort(seq, pivot + 1, hi)
+        Sorter._quick_sort(seq, lo, pivot - 1)
+        Sorter._quick_sort(seq, pivot + 1, hi)
 
     @staticmethod
     def _quick_partition(seq, lo, hi):
@@ -111,12 +116,7 @@ class Sorter(object):
         if seq[mid] > seq[lo]:
             seq[mid], seq[lo] = seq[lo], seq[mid]
 
-    def _test_median_pivot(self):
-        a = [[2, 1, 3], [2, 3, 1], [1, 2, 3], [3, 2, 1], [1, 3, 2], [3, 1, 2]]
-        for i in a:
-            self._median_pivot(i, 0, 2)
-        print(a)
-
+    # COUNTING METHODS: counting and counting_in_place (less memory use)
     @staticmethod
     def counting(seq, max_val=None):
         if max_val is None:
@@ -160,14 +160,41 @@ class Sorter(object):
                 seq[i] = j
                 i += 1
 
+    # HEAP METHODS: _parent (not used), _left, _right, _max_heapify and heap
+    def heap(self, seq):
+        for i in range(len(seq)):
+            heap_last_idx = len(seq) - 1 - i
+            Sorter._max_heapify(seq, heap_last_idx)
+            seq[0], seq[heap_last_idx] = seq[heap_last_idx], seq[0]
+
+    @staticmethod
+    def _parent(i):
+        return math.ceil(i / 2) - 1
+
+    @staticmethod
+    def _left(i):
+        return i * 2 + 1
+
+    @staticmethod
+    def _right(i):
+        return i * 2 + 2
+
+    @staticmethod
+    def _max_heapify(seq, heap_last_idx):
+        start_idx = Sorter._parent(heap_last_idx)
+        for i in range(start_idx, -1, -1):
+            L = Sorter._left(i)
+            R = Sorter._right(i)
+            max_val = i
+            if L <= heap_last_idx and seq[L] > seq[max_val]:
+                max_val = L
+            if R <= heap_last_idx and seq[R] > seq[max_val]:
+                max_val = R
+            seq[i], seq[max_val] = seq[max_val], seq[i]
+
+
 # TO DO
     # def bubble(self, seq):
-    #     pass
-
-    # def heap(self, seq):
-    #     pass
-
-    # def counting(self, seq):
     #     pass
 
     # def radix(self, seq):
