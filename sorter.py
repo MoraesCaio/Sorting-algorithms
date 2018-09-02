@@ -120,10 +120,7 @@ class Sorter(object):
     @staticmethod
     def counting(seq, max_val=None):
         if max_val is None:
-            max_val = seq[0]
-            for i in range(1, len(seq)):
-                if seq[i] > max_val:
-                    max_val = seq[i]
+            max_val = max(seq)
 
         count = [0] * (max_val + 1)
 
@@ -144,10 +141,7 @@ class Sorter(object):
     @staticmethod
     def counting_in_place(seq, max_val=None):
         if max_val is None:
-            max_val = seq[0]
-            for i in range(1, len(seq)):
-                if seq[i] > max_val:
-                    max_val = seq[i]
+            max_val = max(seq)
 
         count = [0] * (max_val + 1)
 
