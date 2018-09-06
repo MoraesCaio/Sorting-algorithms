@@ -1,6 +1,7 @@
 from generator import Generator
 from sorter import Sorter
 import argparse
+import inspect
 
 parser = argparse.ArgumentParser()
 
@@ -25,68 +26,96 @@ parser.add_argument('-ul', '--few-unique', action='store_true', help='Calls sort
 parser.add_argument('-is', '--insertion', action='store_true', help='Calls INSERTION sort.')
 parser.add_argument('-ss', '--selection', action='store_true', help='Calls SELECTION sort.')
 parser.add_argument('-ms', '--merge', action='store_true', help='Calls MERGE sort.')
+parser.add_argument('-msv', '--merge-verbose', action='store_true', help='Calls Verbose MERGE sort.')
 parser.add_argument('-qs', '--quick', action='store_true', help='Calls QUICK sort.')
-parser.add_argument('-cs', '--counting', action='store_true', help='Calls COUNTING sort.')
+parser.add_argument('-cs', '--counting', action='store_true', help='Calls COUNTING sort in place.')
+parser.add_argument('-csnip', '--counting-not-in-place', action='store_true', help='Calls COUNTING sort NOT in place.')
 parser.add_argument('-hs', '--heap', action='store_true', help='Calls HEAP sort.')
 
 
 args, _ = parser.parse_known_args()
 
 
+def decorate_sort_class(cls):
+    for name, method in inspect.getmembers(cls, inspect.ismethod):
+        # avoids 'private' methods
+        if not name.startswith('_'):
+            setattr(cls, name, decorator_output_sort(method))
+    return cls
+
+
+def decorator_output_sort(func):
+    def wrapper(*args, list_dict=None, **kwargs):
+        temp_copy = list_dict['list'][:]
+        wrapped_func = func(temp_copy, *args, **kwargs)
+        print('\t' + list_dict['title'] + str(list_dict['list']))
+
+        expected_result = sorted(g.few_unique_l) if list_dict['expected_few_unique'] else g.sorted_l
+
+        print('\tList is sorted? ' + str(temp_copy == expected_result))
+        print('\tResult:\t\t' + str(temp_copy))
+        print('\t-----------------------')
+        print('\tEXPECTED:\t' + str(expected_result), end='\n\n')
+        return wrapped_func
+    return wrapper
+
+
 g = Generator()
-s = Sorter()
+s = decorate_sort_class(Sorter())
 g.generate(args.length, args.min, args.max, args.uniques, args.swaps, args.seed)
+
+# LISTS list_dict=[{'list': [integersList], 'title': titleStr, 'expected_few_unique': bool}]
+list_dicts = []
+
+if args.sorted:
+    list_dicts.append({'list': g.sorted_l, 'title': 'SORTED:\t\t', 'expected_few_unique': False})
+
+if args.nearly:
+    list_dicts.append({'list': g.nearly_l, 'title': 'NEARLY SORTED:\t', 'expected_few_unique': False})
+
+if args.reversed:
+    list_dicts.append({'list': g.reversed_l, 'title': 'REVERSED:\t', 'expected_few_unique': False})
+
+if args.random:
+    list_dicts.append({'list': g.random_l, 'title': 'RANDOM:\t\t', 'expected_few_unique': False})
+
+if args.few_unique:
+    list_dicts.append({'list': g.few_unique_l, 'title': 'FEW UNIQUES:\t', 'expected_few_unique': True})
+
+
 print('#### LISTS ####')
 g.print_lists()
 
 
-def sort(lst, func, title='LIST', expected_few_unique=False):
-    print('\t' + title, end='')
-    print(lst)
-    temp = lst[:]
-    func(temp)
-    print('\tList is sorted? ' + str(temp == (sorted(g.few_unique_l) if expected_few_unique else g.sorted_l)))
-    print('\tResult:\t\t' + str(temp))
-    print('\t-----------------------')
-    print('\tEXPECTED:\t' + str(sorted(g.few_unique_l) if expected_few_unique else g.sorted_l), end='\n\n')
-
-
-def sort_lists(func):
-    if args.sorted:
-        sort(g.sorted_l, func, 'SORTED:\t\t')
-    if args.nearly:
-        sort(g.nearly_l, func, 'NEARLY SORTED:\t')
-    if args.reversed:
-        sort(g.reversed_l, func, 'REVERSED:\t')
-    if args.random:
-        sort(g.random_l, func, 'RANDOM:\t\t')
-    if args.few_unique:
-        sort(g.few_unique_l, func, 'FEW UNIQUES:\t', expected_few_unique=True)
-
-
 if args.insertion:
     print('\n#### INSERTION ####')
-    sort_lists(s.insertion)
+    for lst in list_dicts:
+        s.insertion(list_dict=lst)
 
 if args.selection:
     print('\n#### SELECTION ####')
-    sort_lists(s.selection)
+    for lst in list_dicts:
+        s.selection(list_dict=lst)
 
-if args.merge:
+if args.merge or args.merge_verbose:
     print('\n#### MERGE ####')
-    sort_lists(s.merge)
+    for lst in list_dicts:
+        s.merge(list_dict=lst, verbose=args.merge_verbose)
 
 if args.quick:
     print('\n#### QUICK ####')
-    sort_lists(s.quick)
+    for lst in list_dicts:
+        s.quick(list_dict=lst)
 
-if args.counting:
+if args.counting or args.counting_not_in_place:
     print('\n#### COUNTING ####')
-    sort_lists(s.counting)
+    for lst in list_dicts:
+        s.counting(list_dict=lst, in_place=args.counting)
 
 if args.heap:
     print('\n#### HEAP ####')
-    sort_lists(s.heap)
+    for lst in list_dicts:
+        s.heap(list_dict=lst)
 
 # TO DO
 # if args.bubble:

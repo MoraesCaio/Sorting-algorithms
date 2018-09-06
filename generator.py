@@ -18,7 +18,7 @@ class Generator(object):
         seed(rnd_seed)
         self.random_l = [randint(min_v, max_v) for i in range(0, n)]
         self.sorted_l = sorted(self.random_l)
-        self.reversed_l = self. sorted_l[::-1]
+        self.reversed_l = self.sorted_l[::-1]
 
         self.unique_vals = sample(set(self.sorted_l), abs(n_uniques))
         if n_uniques < 0:

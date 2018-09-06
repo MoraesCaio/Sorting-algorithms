@@ -33,7 +33,11 @@ class Sorter(object):
             if idxMin != i:
                 seq[i], seq[idxMin] = seq[idxMin], seq[i]
 
+    # MERGE METHODS: merge (caller) and _merge (recursive)
     def merge(self, seq, verbose=False):
+        self._merge(seq, verbose)
+
+    def _merge(self, seq, verbose=False):
         if verbose:
             print('\tSplitting: ' + str(seq))
 
@@ -41,8 +45,8 @@ class Sorter(object):
             middle = len(seq) // 2
             left, right = seq[:middle], seq[middle:]
 
-            self.merge(left)
-            self.merge(right)
+            self._merge(left, verbose)
+            self._merge(right, verbose)
 
             # Merging halves
             i, j, k = 0, 0, 0
@@ -116,9 +120,15 @@ class Sorter(object):
         if seq[mid] > seq[lo]:
             seq[mid], seq[lo] = seq[lo], seq[mid]
 
-    # COUNTING METHODS: counting and counting_in_place (less memory use)
-    @staticmethod
-    def counting(seq, max_val=None):
+    # COUNTING METHODS: counting (caller), _counting and _counting_in_place (less memory use)
+    def counting(self, seq, max_val=None, in_place=True):
+        if in_place:
+            self._counting_in_place(seq, max_val=None)
+        else:
+            self._counting(seq, max_val=None)
+
+    def _counting(self, seq, max_val=None):
+        print('(not in place)')
         if max_val is None:
             max_val = max(seq)
 
@@ -138,8 +148,8 @@ class Sorter(object):
         for i in range(len(seq)):
             seq[i] = result[i]
 
-    @staticmethod
-    def counting_in_place(seq, max_val=None):
+    def _counting_in_place(self, seq, max_val=None):
+        print('(in place)')
         if max_val is None:
             max_val = max(seq)
 
