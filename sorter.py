@@ -4,19 +4,15 @@ import math
 class Sorter(object):
 
     def insertion(self, seq):
-        i = 1
+        for i in range(1, len(seq)):
+            k = seq[i]
+            j = i - 1
 
-        for i in range(len(seq)):
+            while j >= 0 and seq[j] > k:
+                seq[j + 1] = seq[j]
+                j -= 1
 
-            # searching position on sorted part of the list
-            for j in range(i, 0, -1):
-
-                # found correct position -> stops swapping
-                if seq[j - 1] <= seq[j]:
-                    break
-
-                # swapping elements
-                seq[j], seq[j - 1] = seq[j - 1], seq[j]
+            seq[j + 1] = k
 
     def selection(self, seq):
 
